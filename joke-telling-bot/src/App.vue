@@ -1,6 +1,7 @@
 <template>
-  <main>
+  <main class="flex flex-col items-center justify-center gap-4 md:gap-8 min-h-screen px-4 py-8">
     <h1 class="text-xl" v-if="joke.id">{{ joke.setup }}</h1>
+    <AppIcon></AppIcon>
     <AppButton @click="tellAJoke">Tell me a joke!</AppButton>
   </main>
 </template>
