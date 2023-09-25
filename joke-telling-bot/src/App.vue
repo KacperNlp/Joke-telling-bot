@@ -1,13 +1,15 @@
 <template>
-  <main class="flex flex-col items-center justify-center gap-4 md:gap-8 min-h-screen px-4 py-8">
-    <h1 class="text-xl" v-if="joke.id">{{ joke.setup }}</h1>
+  <main
+    class="flex flex-col items-center justify-end gap-4 md:gap-8 min-h-screen px-4 pt-8 pb-16 md:pb-24"
+  >
+    <AppMessage v-if="isJokeSet" :punchline="joke.punchline" :setup="joke.setup"></AppMessage>
     <AppIcon></AppIcon>
     <AppButton @click="tellAJoke">Tell me a joke!</AppButton>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 type Joke = {
   type: string
@@ -23,11 +25,17 @@ let joke = ref<Joke>({
   punchline: '',
   id: null
 })
+let isLoading = ref(false)
 
 const tellAJoke = async () => {
+  isLoading.value = true
   const responseValueFromApi = await fetch(API_URL)
   const jokeObject = await responseValueFromApi.json()
+  isLoading.value = false
   joke.value = jokeObject[0]
-  console.log(joke)
 }
+
+const isJokeSet = computed(() => {
+  return !!joke.value.id && !isLoading.value
+})
 </script>
